@@ -74,6 +74,7 @@ public class JavascriptClientCodegen extends DefaultCodegen implements CodegenCo
     public static final String LOAD_TEST_DATA_FROM_FILE = "loadTestDataFromFile";
     public static final String TEST_DATA_FILE = "testDataFile";
     public static final String PRESERVE_LEADING_PARAM_CHAR = "preserveLeadingParamChar";
+    public static final String NPM_REPOSITORY = "npmRepository";
 
     static final String[][] JAVASCRIPT_SUPPORTING_FILES = new String[][] {
             new String[] {"package.mustache", "package.json"},
@@ -121,6 +122,8 @@ public class JavascriptClientCodegen extends DefaultCodegen implements CodegenCo
     protected boolean loadTestDataFromFile = false;
     protected File testDataFile = null;
     protected boolean preserveLeadingParamChar = false;
+
+    protected String npmRepository = null;
 
     public JavascriptClientCodegen() {
         super();
@@ -229,6 +232,7 @@ public class JavascriptClientCodegen extends DefaultCodegen implements CodegenCo
         cliOptions.add(CliOption.newBoolean(LOAD_TEST_DATA_FROM_FILE, "Load test data from a JSON file"));
         cliOptions.add(CliOption.newString(TEST_DATA_FILE, "JSON file to contain test data"));
         cliOptions.add(CliOption.newString(PRESERVE_LEADING_PARAM_CHAR, "Preserves leading $ and _ characters in parameter names."));
+        cliOptions.add(new CliOption(NPM_REPOSITORY, "Use this property to set an url your private npmRepo in the package.json"));
     }
 
     @Override
@@ -296,6 +300,9 @@ public class JavascriptClientCodegen extends DefaultCodegen implements CodegenCo
         }
         if (additionalProperties.containsKey(CodegenConstants.MODEL_PROPERTY_NAMING)) {
             setModelPropertyNaming((String) additionalProperties.get(CodegenConstants.MODEL_PROPERTY_NAMING));
+        }
+        if (additionalProperties.containsKey(NPM_REPOSITORY)) {
+            setNpmRepository(additionalProperties.get(NPM_REPOSITORY).toString());
         }
         boolean loadTestDataFromFile = convertPropertyToBooleanAndWriteBack(LOAD_TEST_DATA_FROM_FILE);
         this.setLoadTestDataFromFile(loadTestDataFromFile);
@@ -377,6 +384,7 @@ public class JavascriptClientCodegen extends DefaultCodegen implements CodegenCo
         additionalProperties.put(EMIT_MODEL_METHODS, emitModelMethods);
         additionalProperties.put(EMIT_JS_DOC, emitJSDoc);
         additionalProperties.put(USE_ES6, useES6);
+        additionalProperties.put(NPM_REPOSITORY, npmRepository);
 
         // make api and model doc path available in mustache template
         additionalProperties.put("apiDocPath", apiDocPath);
@@ -486,6 +494,14 @@ public class JavascriptClientCodegen extends DefaultCodegen implements CodegenCo
 
     public void setUsePromises(boolean usePromises) {
         this.usePromises = usePromises;
+    }
+
+    public String getNpmRepository() {
+        return npmRepository;
+    }
+
+    public void setNpmRepository(String npmRepository) {
+        this.npmRepository = npmRepository;
     }
 
     public void setUseES6(boolean useES6) {

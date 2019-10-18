@@ -34,6 +34,7 @@ public class JavaScriptOptionsProvider implements OptionsProvider {
     public static final String LOAD_TEST_DATA_FROM_FILE_VALUE = "true";
     public static final String TEST_DATA_FILE_VALUE = "test/resources/test-data.json";
     public static final String PRESERVE_LEADING_PARAM_CHAR_VALUE = "true";
+    private static final String NPM_REPOSITORY_VALUE = "https://registry.npmjs.org";
 
     private ImmutableMap<String, String> options;
 
@@ -70,6 +71,7 @@ public class JavaScriptOptionsProvider implements OptionsProvider {
                 .put(JavascriptClientCodegen.LOAD_TEST_DATA_FROM_FILE, LOAD_TEST_DATA_FROM_FILE_VALUE)
                 .put(JavascriptClientCodegen.TEST_DATA_FILE, TEST_DATA_FILE_VALUE)
                 .put(JavascriptClientCodegen.PRESERVE_LEADING_PARAM_CHAR, PRESERVE_LEADING_PARAM_CHAR_VALUE)
+                .put(JavascriptClientCodegen.NPM_REPOSITORY, NPM_REPOSITORY_VALUE)
                 .build();
     }
 
