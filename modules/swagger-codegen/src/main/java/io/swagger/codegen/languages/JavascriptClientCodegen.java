@@ -1067,9 +1067,11 @@ public class JavascriptClientCodegen extends DefaultCodegen implements CodegenCo
 
         // Provide access to all property models.
         for (CodegenModel cgModel : new HashSet<CodegenModel>(cgModels.values())) {
+            detectRecursiveModel(cgModel.allVars, cgModel.classname, cgModels);
             postProcessProperties(cgModel.vars, cgModels);
-            if (cgModel.allVars != cgModel.vars)
+            if (cgModel.allVars != cgModel.vars) {
                 postProcessProperties(cgModel.allVars, cgModels);
+            }
         }
 
         return objs;
@@ -1319,6 +1321,27 @@ public class JavascriptClientCodegen extends DefaultCodegen implements CodegenCo
             }
         }
         return objs;
+    }
+
+    public void detectRecursiveModel(List<CodegenProperty> allVars, String className, Map<String, CodegenModel> allModels) {
+        if (allVars == null || allVars.isEmpty()) {
+            return;
+        }
+        for (CodegenProperty codegenProperty : allVars) {
+            if (codegenProperty.isPrimitiveType) {
+                continue;
+            }
+            if (codegenProperty.isListContainer || codegenProperty.isMapContainer) {
+                if (className.equalsIgnoreCase(codegenProperty.items.datatype)) {
+                    codegenProperty.items.vendorExtensions.put("x-is-recursive-model", Boolean.TRUE);
+                    continue;
+                }
+            }
+            if (className.equalsIgnoreCase(codegenProperty.datatype)) {
+                codegenProperty.vendorExtensions.put("x-is-recursive-model", Boolean.TRUE);
+                continue;
+            }
+        }
     }
 
     @Override
