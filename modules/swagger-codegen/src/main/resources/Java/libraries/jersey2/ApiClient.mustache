@@ -655,7 +655,7 @@ public class ApiClient {
 
     // Not using `.target(this.basePath).path(path)` below,
     // to support (constant) query string in `path`, e.g. "/posts?draft=1"
-    WebTarget target = httpClient.target(this.basePath + path);
+    WebTarget target = httpClient.target(this.getBasePath() + path);
 
     if (queryParams != null) {
       for (Pair queryParam : queryParams) {
